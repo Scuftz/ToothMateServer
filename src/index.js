@@ -1,12 +1,15 @@
 require("./models/User");
+require("./models/Education");
 const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
+const educationRoutes = require("./routes/educationRoutes");
 const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
 app.use(express.json());
 app.use(authRoutes);
+app.use(educationRoutes);
 
 //MongoDB connection
 const mongoUri = "mongodb+srv://tmAdmin:tmAdminR&D@toothmatecluster.82nq5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
