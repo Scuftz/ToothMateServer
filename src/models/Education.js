@@ -10,7 +10,7 @@ const educationSchema = mongoose.Schema({
         required: true
     },
     age_range: {
-        type: Integer,  //an integer between 1 and 3. 1 === 0-10 ; 2 === 11-17 ; 3 === 18 and above
+        type: Number,  //an integer between 1 and 3. 1 === 0-10 ; 2 === 11-17 ; 3 === 18 and above
         required: true
     }
 });

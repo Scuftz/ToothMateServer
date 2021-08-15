@@ -10,4 +10,22 @@ router.get("/Clinics", (req, res) => {
     .catch(err => res.status(404).json({ error: 'No clinics found' }));
 });
 
+router.get("/Clinics/:term", (req, res) => {
+    const search = req.params.term;
+    Clinic.find( { $text: { $search: `${search}` } } )
+    .then(clinic => res.json(clinic))
+    .catch(err => res.status(404).json({ error: 'No clinics found' }));
+})
+ 
+router.post("/addClinic", async (req, res) => {
+    const { name, suburb, phone, email, bookingURL } = req.body; //req.body contains the user sign up details
+    try {
+        const clinic = new Clinic({ name, suburb, phone, email, bookingURL }); //creating instance of user
+        await clinic.save(); //saves the user - async operation to save user to DB
+    } catch (err) {
+        console.log('no')
+        return res.status(422).send(err.message); //422 indicates user sent us invalid data
+    }
+});
+
 module.exports = router;
