@@ -15,7 +15,7 @@ router.post("/signup", async (req, res) => {
         await user.save(); //saves the user - async operation to save user to DB
 
         const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY"); //creating JWT, assigning it its id from the DB to the token
-        res.send({ token });
+        res.send({ token, id: user._id });
     } catch (err) {
         return res.status(422).send(err.message); //422 indicates user sent us invalid data
     }
