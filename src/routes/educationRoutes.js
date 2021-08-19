@@ -10,13 +10,6 @@ router.get("/Education", (req, res) => {
     .catch(err => res.status(404).json({ error: 'No topics found' }));
 });
 
-router.get("/Education/:age", (req, res) => {
-    const age = req.params.age;
-    Education.find({ "age_range": age })
-    .then(education => res.json(education))
-    .catch(err => res.status(404).json({ error: "No topics found" }))
-});
-
 router.post("/addEducation", async (req, res) => {
     const { topic, content } = req.body; 
 
