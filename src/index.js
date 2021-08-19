@@ -1,18 +1,23 @@
 require("./models/User");
 require("./models/Education");
+require("./models/Clinic");
 require("./models/Appointment");
 const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
 const educationRoutes = require("./routes/educationRoutes");
+const clinicRoutes = require("./routes/clinicRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
+
 const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
 app.use(express.json());
 app.use(authRoutes);
 app.use(educationRoutes);
+app.use(clinicRoutes);
 app.use(appointmentRoutes);
+
 
 //MongoDB connection
 const mongoUri =

@@ -15,7 +15,7 @@ router.post("/signup", async (req, res) => {
         await user.save(); //saves the user - async operation to save user to DB
 
         const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY"); //creating JWT, assigning it its id from the DB to the token
-        res.send({ token });
+        res.send({ token, id: user._id });
     } catch (err) {
         return res.status(422).send(err.message); //422 indicates user sent us invalid data
     }
@@ -36,10 +36,19 @@ router.post("/signin", async (req, res) => {
     try {
         await user.comparePassword(password);
         const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
-        res.send({ token });
+        res.send({ token, id: user._id });
     } catch (err) {
         return res.status(422).send({ error: "Invalid password or email" });
     }
+});
+
+//Whenever someone opens education screen, give the date of birth to the code to find out their age range
+router.get('/getDOB/:id',  (req, res) => {
+    const id = req.params.id;
+
+    const user = User.findOne({ _id: id })
+    .then(user => res.json(user.DOB))
+    .catch(err => res.status(404).json({ error: 'No topics found' }));
 });
 
 module.exports = router;
