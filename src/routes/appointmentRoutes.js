@@ -27,4 +27,11 @@ router.post("/addAppointment", async (req, res) => {
   }
 });
 
+router.get("/Appointment/:email", (req, res) => {
+  const email = req.params.email;
+
+  Appointment.find({ email: email })
+    .then((appointment) => res.json(appointment))
+    .catch((err) => res.status(404).json({ error: "No appointments found" }));
+});
 module.exports = router;
