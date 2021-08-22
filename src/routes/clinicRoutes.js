@@ -17,6 +17,12 @@ router.get("/Clinics/:term", (req, res) => {
     .catch(err => res.status(404).json({ error: 'No clinics found' }));
 })
  
+router.get("/nameClinics", (req, res) => {
+    Clinic.find({}, { name: 1 })
+    .then(clinic => res.json(clinic))
+    .catch(err => res.status(404).json({ error: 'No clinics found' }));
+});
+
 router.post("/addClinic", async (req, res) => {
     const { name, suburb, phone, email, bookingURL } = req.body; //req.body contains the user sign up details
     try {
