@@ -8,11 +8,11 @@ const router = express.Router();
 
 //Whenever someone makes a POST request to /signup, the following callback function will be called
 router.post("/signup", async (req, res) => {
-  const { firstname, lastname, email, mobile, password } = req.body; //req.body contains the user sign up details
+    const { firstname, lastname, email, mobile, password, clinic } = req.body; //req.body contains the user sign up details
 
-  try {
-    const user = new User({ firstname, lastname, email, mobile, password }); //creating instance of user
-    await user.save(); //saves the user - async operation to save user to DB
+    try {
+        const user = new User({ firstname, lastname, email, mobile, password, clinic}); //creating instance of user
+        await user.save(); //saves the user - async operation to save user to DB
 
     const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY"); //creating JWT, assigning it its id from the DB to the token
     res.send({ token, id: user._id });
@@ -46,9 +46,9 @@ router.post("/signin", async (req, res) => {
 router.get("/getDOB/:id", (req, res) => {
   const id = req.params.id;
 
-  const user = User.findOne({ _id: id })
-    .then((user) => res.json(user.DOB))
-    .catch((err) => res.status(404).json({ error: "No topics found" }));
+    const user = User.findOne({ _id: id })
+    .then(user => res.json({DOB: user.DOB}))
+    .catch(err => res.status(404).json({ error: 'No topics found' }));
 });
 
 router.get("/getEmail/:id", (req, res) => {
