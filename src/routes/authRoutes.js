@@ -56,7 +56,7 @@ router.get("/getDOB/:id", (req, res) => {
   const id = req.params.id;
 
   const user = User.findOne({ _id: id })
-    .then((user) => res.json({ DOB: user.DOB }))
+    .then((user) => res.json({ dob: user.dob }))
     .catch((err) => res.status(404).json({ error: "No topics found" }));
 });
 
