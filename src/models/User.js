@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
   mobile: {
     type: String,
     unique: true,
+    required: true,
   },
   password: {
     type: String,
@@ -26,6 +27,14 @@ const userSchema = new mongoose.Schema({
   },
   children: [{ type: String }],
   parent: String,
+  dob: {
+    type: Date,
+    required: true,
+  },
+  clinic: {
+    type: String,
+    required: true,
+  },
 });
 
 //Pre-save hook that automatically runs before we save a user
