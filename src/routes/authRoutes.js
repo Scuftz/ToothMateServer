@@ -68,4 +68,14 @@ router.get("/getEmail/:id", (req, res) => {
     .catch((err) => res.status(404).json({ error: "No email found" }));
 });
 
+router.get("/getUserClinic/:id", (req, res) => {
+  const id = req.params.id;
+
+  console.log("User Clinic id: " + id);
+
+  const user = User.findOne({ _id: id })
+    .then((user) => res.json({ clinic: user.clinic }))
+    .catch((err) => res.status(404).json({ error: "No email found" }));
+});
+
 module.exports = router;
