@@ -31,19 +31,10 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signupchild", async (req, res) => {
-  const {
-    firstname,
-    lastname,
-    email,
-    mobile,
-    password,
-    parentToken,
-    dob,
-    clinic,
-  } = req.body;
+  const { firstname, lastname, email, mobile, password, dob, clinic, parent } =
+    req.body;
 
   try {
-    parent = jwt.decode(parentToken).userId;
     const user = new User({
       firstname,
       lastname,
