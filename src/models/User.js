@@ -25,6 +25,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  children: [{ type: String }],
+  parent: String,
   dob: {
     type: Date,
     required: true,

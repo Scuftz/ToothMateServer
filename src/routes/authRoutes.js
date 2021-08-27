@@ -30,6 +30,32 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+router.post("/signupchild", async (req, res) => {
+  const { firstname, lastname, email, mobile, password, dob, clinic, parent } =
+    req.body;
+
+  try {
+    const user = new User({
+      firstname,
+      lastname,
+      email,
+      mobile,
+      password,
+      parent,
+      dob,
+      clinic,
+    });
+    console.log(user);
+    parentInfo = await User.findByIdAndUpdate(parent, {
+      $push: { children: user._id },
+    });
+    await user.save();
+  } catch (err) {
+    console.log(err.message);
+    return res.status(422).send(err.message);
+  }
+});
+
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -45,10 +71,23 @@ router.post("/signin", async (req, res) => {
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
-    res.send({ token, id: user._id });
+    res.send({ token, id: user._id, user });
   } catch (err) {
     return res.status(422).send({ error: "Invalid password or email" });
   }
+});
+
+router.post("/user", async (req, res) => {
+  console.log(req.body.token);
+  const token = req.body.token;
+  const userId = jwt.decode(token);
+
+  console.log(userId);
+
+  const user = await User.findOne({ _id: userId.userId });
+  console.log(user);
+
+  res.send({ token, user });
 });
 
 //Whenever someone opens education screen, give the date of birth to the code to find out their age range
