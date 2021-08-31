@@ -117,4 +117,20 @@ router.get("/getUserClinic/:id", (req, res) => {
     .catch((err) => res.status(404).json({ error: "No email found" }));
 });
 
+router.get("/user/:id", (req, res) => {
+  const id = req.params.id;
+
+  console.log("User Clinic id: " + id);
+
+  const user = User.findOne({ _id: id })
+    .then((user) => res.json(user))
+    .catch((err) => res.status(404).json({ error: "No email found" }));
+});
+
+router.put('/updateUser/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body)
+    .then(book => res.json({ error: "" }))
+    .catch(err => res.status(400).json({ error: 'Unable to update the Database' }));
+});
+
 module.exports = router;
