@@ -133,4 +133,10 @@ router.put('/updateUser/:id', (req, res) => {
     .catch(err => res.status(400).json({ error: 'Unable to update the Database' }));
 });
 
+router.put('/updateUserClinic/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body)
+    .then(book => res.json({ error: "" }))
+    .catch(err => res.status(400).json({ error: 'Unable to update the Database' }));
+});
+
 module.exports = router;
