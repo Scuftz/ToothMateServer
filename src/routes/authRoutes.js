@@ -120,8 +120,6 @@ router.get("/getUserClinic/:id", (req, res) => {
 router.get("/user/:id", (req, res) => {
   const id = req.params.id;
 
-  console.log("User Clinic id: " + id);
-
   const user = User.findOne({ _id: id })
     .then((user) => res.json(user))
     .catch((err) => res.status(404).json({ error: "No email found" }));
@@ -137,6 +135,28 @@ router.put('/updateUserClinic/:id', (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body)
     .then(book => res.json({ error: "" }))
     .catch(err => res.status(400).json({ error: 'Unable to update the Database' }));
+});
+
+router.put("/changePassword/:id", async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const id = req.params.id;
+
+  if (!password) {
+    return res.status(422).send({ error: "Must provide current password" });
+  }
+
+  const user = await User.findOne({ _id: id });
+  if (!user) {
+    return res.status(422).send({ error: "Invalid password or email" });
+  }
+
+  try {
+    await user.comparePassword(oldPassword);
+    user.updateOne({}, {password: newPassword})
+    
+  } catch (err) {
+    return res.status(422).send({ error: "Invalid password or email" });
+  }
 });
 
 module.exports = router;
