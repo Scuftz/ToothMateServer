@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const User = mongoose.model("User");
+const bcrypt = require("bcrypt");
 
 const router = express.Router();
 
@@ -141,9 +142,11 @@ router.put("/changePassword/:id", async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const id = req.params.id;
 
-  if (!password) {
+  if (!oldPassword) {
     return res.status(422).send({ error: "Must provide current password" });
   }
+
+  console.log(newPassword);
 
   const user = await User.findOne({ _id: id });
   if (!user) {
@@ -151,10 +154,25 @@ router.put("/changePassword/:id", async (req, res) => {
   }
 
   try {
-    await user.comparePassword(oldPassword);
-    user.updateOne({}, {password: newPassword})
+    const match = await user.comparePassword(oldPassword);
+    console.log(match)
+
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) {
+        return err;
+      }
+  
+      bcrypt.hash(newPassword, salt, (err, hash) => {
+        if (err) {
+          return err;
+        }
+        User.updateOne({"_id": id}, {"password": hash})
+        .then(() => res.json({ error: "" }))
+      });
+    });
     
   } catch (err) {
+    console.log("no")
     return res.status(422).send({ error: "Invalid password or email" });
   }
 });
