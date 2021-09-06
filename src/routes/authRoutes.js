@@ -51,6 +51,7 @@ router.post("/signupchild", async (req, res) => {
       $push: { children: user._id },
     });
     await user.save();
+    res.send();
   } catch (err) {
     console.log(err.message);
     return res.status(422).send(err.message);
