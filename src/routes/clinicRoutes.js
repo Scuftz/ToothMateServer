@@ -12,7 +12,6 @@ router.get("/Clinics", (req, res) => {
 
 router.get("/getDentalClinic/:id", (req, res) => {
   const id = req.params.id;
-  console.log("getDentalClinic ID: " + id);
   const clinic = Clinic.findOne({ _id: id })
     .then((clinic) => res.json({ clinic: clinic }))
     .catch((err) => res.status(404).json({ error: "No clinic found" }));
