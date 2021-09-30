@@ -94,6 +94,18 @@ router.post("/user", async (req, res) => {
   res.send({ token, user });
 });
 
+router.get("/getchildaccounts/:id", async (req, res) => {
+  const id = req.params.id;
+  const childrenid = await User.findById(id, "children");
+  let children = [];
+  for (let i = 0; i < childrenid.children.length; ++i) {
+    child = await User.findById(childrenid.children[i]);
+    children.push(child);
+  }
+  console.log("hello");
+  res.send(children);
+});
+
 //Whenever someone opens education screen, give the date of birth to the code to find out their age range
 router.get("/getDOB/:id", (req, res) => {
   const id = req.params.id;
