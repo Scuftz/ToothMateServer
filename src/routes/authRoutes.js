@@ -9,7 +9,7 @@ const router = express.Router();
 
 //Whenever someone makes a POST request to /signup, the following callback function will be called
 router.post("/signup", async (req, res) => {
-  const { firstname, lastname, email, mobile, password, dob, clinic } =
+  const { firstname, lastname, email, password, dob, clinic } =
     req.body; //req.body contains the user sign up details
 
   try {
@@ -17,7 +17,6 @@ router.post("/signup", async (req, res) => {
       firstname,
       lastname,
       email,
-      mobile,
       password,
       dob,
       clinic,
@@ -32,7 +31,7 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signupchild", async (req, res) => {
-  const { firstname, lastname, email, mobile, password, dob, clinic, parent } =
+  const { firstname, lastname, email, password, dob, clinic, parent } =
     req.body;
 
   try {
@@ -40,7 +39,6 @@ router.post("/signupchild", async (req, res) => {
       firstname,
       lastname,
       email,
-      mobile,
       password,
       parent,
       dob,
@@ -147,8 +145,6 @@ router.put("/changePassword/:id", async (req, res) => {
     return res.status(422).send({ error: "Must provide current password" });
   }
 
-  console.log(newPassword);
-
   const user = await User.findOne({ _id: id });
   if (!user) {
     return res.status(422).send({ error: "Invalid password or email" });
@@ -168,13 +164,12 @@ router.put("/changePassword/:id", async (req, res) => {
           return err;
         }
         User.updateOne({"_id": id}, {"password": hash})
-        .then(() => res.json({ error: "" }))
+        .then(() => res.json({}))
       });
     });
     
   } catch (err) {
-    console.log("no")
-    return res.status(422).send({ error: "Invalid password or email" });
+    return res.status(422).send({ error: "Invalid password" });
   }
 });
 

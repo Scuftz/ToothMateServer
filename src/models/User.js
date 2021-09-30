@@ -16,11 +16,6 @@ const userSchema = new mongoose.Schema({
     unique: true, //mongoose will understand we want every email to be unique, error if duplicate attempted
     required: true,
   },
-  mobile: {
-    type: String,
-    unique: true,
-    required: true,
-  },
   password: {
     type: String,
     required: true,
