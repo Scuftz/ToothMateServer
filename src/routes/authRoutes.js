@@ -30,6 +30,18 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+router.post("/disconnectchild", async (req, res) => {
+  const id = req.body.id;
+  const parent = await User.findById(id, "parent");
+  const parentId = parent.parent;
+  await User.findByIdAndUpdate(id, { parent: null });
+  await User.findByIdAndUpdate(parentId, { $pull: { children: id } });
+  console.log("id: " + id);
+  console.log(parentId);
+  console.log("test");
+  res.send();
+});
+
 router.post("/signupchild", async (req, res) => {
   const { firstname, lastname, email, password, dob, clinic, parent } =
     req.body;
@@ -45,10 +57,10 @@ router.post("/signupchild", async (req, res) => {
       clinic,
     });
     console.log(user);
+    await user.save();
     parentInfo = await User.findByIdAndUpdate(parent, {
       $push: { children: user._id },
     });
-    await user.save();
     res.send();
   } catch (err) {
     console.log(err.message);
@@ -99,9 +111,9 @@ router.get("/getchildaccounts/:id", async (req, res) => {
   let children = [];
   for (let i = 0; i < childrenid.children.length; ++i) {
     child = await User.findById(childrenid.children[i]);
+    console.log(child);
     children.push(child);
   }
-  console.log("hello");
   res.send(children);
 });
 
@@ -112,6 +124,14 @@ router.get("/getDOB/:id", (req, res) => {
   const user = User.findOne({ _id: id })
     .then((user) => res.json({ dob: user.dob }))
     .catch((err) => res.status(404).json({ error: "No topics found" }));
+});
+
+router.get("/isChild/:id", (req, res) => {
+  const id = req.params.id;
+
+  const user = User.findOne({ _id: id })
+    .then((user) => res.json({ isChild: user.parent }))
+    .catch((err) => res.status(404).json({ error: "Error" }));
 });
 
 router.get("/getEmail/:id", (req, res) => {
