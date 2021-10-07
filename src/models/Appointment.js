@@ -1,4 +1,7 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"),
+  Pdf = require('./PdfModel.js'), PdfSchema = mongoose.model('Pdf').schema, 
+  Img = require('./ImgModel.js'), ImgSchema = mongoose.model('Img').schema;
+
 
 const appointmentSchema = mongoose.Schema({
   email: {
@@ -12,6 +15,12 @@ const appointmentSchema = mongoose.Schema({
   dentalData: {
     type: Array,
   },
+  pdfs: [PdfSchema],
+  // pdf: {
+  //   type: Buffer,
+  //   contentType: String
+  // },
+  imgs: [ImgSchema]
 });
 
 mongoose.model("Appointment", appointmentSchema);

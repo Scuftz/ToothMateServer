@@ -2,6 +2,8 @@ require("./models/User");
 require("./models/Education");
 require("./models/Clinic");
 require("./models/Appointment");
+require("./models/ImgModel");
+require("./models/PdfModel");
 const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
