@@ -37,7 +37,7 @@ router.post("/addAppointment", upload.single('file'), async (req, res) => {
   console.log("D: " + date);
   console.log("DD: " + dentalData);
   console.log("Invoice: " + invoice.path);
-  console.log("Img: " + img.path);
+  // console.log("Img: " + img.path);
   console.log("Notes: " + notes);
 
   var pdfs = new Pdf();
@@ -45,8 +45,13 @@ router.post("/addAppointment", upload.single('file'), async (req, res) => {
   pdfs.pdf.contentType = "application/pdf";
 
   var imgs = new Img();
-  imgs.img.data = fs.readFileSync(req.body.img.path);
   imgs.img.contentType = "image/png";
+
+  try {
+    imgs.img.data = fs.readFileSync(req.body.img.path);
+  } catch (err) {
+    imgs.img.data = "";
+  }
 
   try {
     const appointment = new Appointment({ email, date, dentalData, pdfs, imgs, notes });
