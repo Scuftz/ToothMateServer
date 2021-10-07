@@ -31,25 +31,25 @@ router.get("/Appointment", (req, res) => {
 
 router.post("/addAppointment", upload.single('file'), async (req, res) => {
   console.log("Hello!");
-  const { email, date, dentalData, invoice, img } = req.body;
+  const { email, date, dentalData, invoice, img, notes } = req.body;
   console.log("Req: " + req.body);
   console.log("E: " + email);
   console.log("D: " + date);
   console.log("DD: " + dentalData);
   console.log("Invoice: " + invoice.path);
   console.log("Img: " + img.path);
+  console.log("Notes: " + notes);
 
   var pdfs = new Pdf();
   pdfs.pdf.data = fs.readFileSync(req.body.invoice.path);
   pdfs.pdf.contentType = "application/pdf";
-  console.log(pdfs.pdf.data);
 
   var imgs = new Img();
   imgs.img.data = fs.readFileSync(req.body.img.path);
   imgs.img.contentType = "image/png";
 
   try {
-    const appointment = new Appointment({ email, date, dentalData, pdfs, imgs });
+    const appointment = new Appointment({ email, date, dentalData, pdfs, imgs, notes });
     await appointment.save();
     res.send("Appointment Made");
     console.log("success apppointment");

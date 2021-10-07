@@ -20,7 +20,10 @@ const appointmentSchema = mongoose.Schema({
   //   type: Buffer,
   //   contentType: String
   // },
-  imgs: [ImgSchema]
+  imgs: [ImgSchema],
+  notes: {
+    type: String
+  }
 });
 
 mongoose.model("Appointment", appointmentSchema);
