@@ -30,15 +30,7 @@ router.get("/Appointment", (req, res) => {
 });
 
 router.post("/addAppointment", upload.single('file'), async (req, res) => {
-  console.log("Hello!");
   const { email, date, dentalData, invoice, img, notes } = req.body;
-  console.log("Req: " + req.body);
-  console.log("E: " + email);
-  console.log("D: " + date);
-  console.log("DD: " + dentalData);
-  console.log("Invoice: " + invoice.path);
-  // console.log("Img: " + img.path);
-  console.log("Notes: " + notes);
 
   var pdfs = new Pdf();
   pdfs.pdf.data = fs.readFileSync(req.body.invoice.path);
@@ -57,9 +49,7 @@ router.post("/addAppointment", upload.single('file'), async (req, res) => {
     const appointment = new Appointment({ email, date, dentalData, pdfs, imgs, notes });
     await appointment.save();
     res.send("Appointment Made");
-    console.log("success apppointment");
   } catch (err) {
-    console.log("error while making appointment: " + err);
     return res.status(422).send({ error: "Could not save appointment" });
   }
 });

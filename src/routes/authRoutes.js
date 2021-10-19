@@ -36,9 +36,6 @@ router.post("/disconnectchild", async (req, res) => {
   const parentId = parent.parent;
   await User.findByIdAndUpdate(id, { parent: null });
   await User.findByIdAndUpdate(parentId, { $pull: { children: id } });
-  console.log("id: " + id);
-  console.log(parentId);
-  console.log("test");
   res.send();
 });
 
@@ -56,23 +53,18 @@ router.post("/signupchild", async (req, res) => {
       dob,
       clinic,
     });
-    console.log(user);
     await user.save();
     parentInfo = await User.findByIdAndUpdate(parent, {
       $push: { children: user._id },
     });
     res.send();
   } catch (err) {
-    console.log(err.message);
     return res.status(422).send(err.message);
   }
 });
 
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
-
-  console.log("Email: " + email);
-  console.log("Password: " + password);
 
   if (!email || !password) {
     return res.status(422).send({ error: "Must provide email and password" });
@@ -93,14 +85,10 @@ router.post("/signin", async (req, res) => {
 });
 
 router.post("/user", async (req, res) => {
-  console.log(req.body.token);
   const token = req.body.token;
   const userId = jwt.decode(token);
 
-  console.log(userId);
-
   const user = await User.findOne({ _id: userId.userId });
-  console.log(user);
 
   res.send({ token, user });
 });
@@ -111,7 +99,6 @@ router.get("/getchildaccounts/:id", async (req, res) => {
   let children = [];
   for (let i = 0; i < childrenid.children.length; ++i) {
     child = await User.findById(childrenid.children[i]);
-    console.log(child);
     children.push(child);
   }
   res.send(children);
@@ -144,8 +131,6 @@ router.get("/getEmail/:id", (req, res) => {
 
 router.get("/getUserClinic/:id", (req, res) => {
   const id = req.params.id;
-
-  console.log("User Clinic id: " + id);
 
   const user = User.findOne({ _id: id })
     .then((user) => res.json({ clinic: user.clinic }))
@@ -187,7 +172,6 @@ router.put("/changePassword/:id", async (req, res) => {
 
   try {
     const match = await user.comparePassword(oldPassword);
-    console.log(match)
 
     bcrypt.genSalt(10, (err, salt) => {
       if (err) {

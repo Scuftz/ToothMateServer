@@ -36,7 +36,6 @@ router.post("/addClinic", async (req, res) => {
     const clinic = new Clinic({ name, suburb, phone, email, bookingURL }); //creating instance of user
     await clinic.save(); //saves the user - async operation to save user to DB
   } catch (err) {
-    console.log("no");
     return res.status(422).send(err.message); //422 indicates user sent us invalid data
   }
 });
