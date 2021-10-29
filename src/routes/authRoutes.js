@@ -9,8 +9,7 @@ const router = express.Router();
 
 //Whenever someone makes a POST request to /signup, the following callback function will be called
 router.post("/signup", async (req, res) => {
-  const { firstname, lastname, email, password, dob, clinic } =
-    req.body; //req.body contains the user sign up details
+  const { firstname, lastname, email, password, dob, clinic } = req.body; //req.body contains the user sign up details
 
   try {
     const user = new User({
@@ -97,9 +96,11 @@ router.get("/getchildaccounts/:id", async (req, res) => {
   const id = req.params.id;
   const childrenid = await User.findById(id, "children");
   let children = [];
-  for (let i = 0; i < childrenid.children.length; ++i) {
-    child = await User.findById(childrenid.children[i]);
-    children.push(child);
+  if (childrenid) {
+    for (let i = 0; i < childrenid.children.length; ++i) {
+      child = await User.findById(childrenid.children[i]);
+      children.push(child);
+    }
   }
   res.send(children);
 });
@@ -145,16 +146,20 @@ router.get("/user/:id", (req, res) => {
     .catch((err) => res.status(404).json({ error: "No email found" }));
 });
 
-router.put('/updateUser/:id', (req, res) => {
+router.put("/updateUser/:id", (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body)
-    .then(book => res.json({ error: "" }))
-    .catch(err => res.status(400).json({ error: 'Unable to update the Database' }));
+    .then((book) => res.json({ error: "" }))
+    .catch((err) =>
+      res.status(400).json({ error: "Unable to update the Database" })
+    );
 });
 
-router.put('/updateUserClinic/:id', (req, res) => {
+router.put("/updateUserClinic/:id", (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body)
-    .then(book => res.json({ error: "" }))
-    .catch(err => res.status(400).json({ error: 'Unable to update the Database' }));
+    .then((book) => res.json({ error: "" }))
+    .catch((err) =>
+      res.status(400).json({ error: "Unable to update the Database" })
+    );
 });
 
 router.put("/changePassword/:id", async (req, res) => {
@@ -177,16 +182,16 @@ router.put("/changePassword/:id", async (req, res) => {
       if (err) {
         return err;
       }
-  
+
       bcrypt.hash(newPassword, salt, (err, hash) => {
         if (err) {
           return err;
         }
-        User.updateOne({"_id": id}, {"password": hash})
-        .then(() => res.json({}))
+        User.updateOne({ _id: id }, { password: hash }).then(() =>
+          res.json({})
+        );
       });
     });
-    
   } catch (err) {
     return res.status(422).send({ error: "Invalid password" });
   }
