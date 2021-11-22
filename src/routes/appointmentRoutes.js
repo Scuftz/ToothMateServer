@@ -32,29 +32,25 @@ router.get("/Appointment", (req, res) => {
 });
 
 router.post("/addAppointment", upload.single("file"), async (req, res) => {
-  console.log(req.body.images[0].path);
   const { email, date, dentalData, notes } = req.body;
 
   var pdfs = new Pdf();
   pdfs.pdf.data = fs.readFileSync(req.body.invoice.path);
   pdfs.pdf.contentType = "application/pdf";
 
-  //var images = new Img();
   var images = [];
 
   let imageArray = req.body.images;
-  imageArray.forEach((image) => {
-    var img = new Img();
-    img.img.data = fs.readFileSync(image.path);
-    img.img.contentType = "image/png";
-    images.push(img);
-  });
-
-  /*try {                        
-    images.img.data = fs.readFileSync(req.body.images[0].path);
+  try {
+    imageArray.forEach((image) => {
+      var img = new Img();
+      img.img.data = fs.readFileSync(image.path);
+      img.img.contentType = "image/png";
+      images.push(img);
+    });
   } catch (err) {
-    images.img.data = "";
-  }*/
+    console.log("Image error: " + err);
+  }
 
   try {
     const appointment = new Appointment({
