@@ -68,6 +68,22 @@ router.post("/addAppointment", upload.single("file"), async (req, res) => {
   }
 });
 
+router.get("/getAllImages/:email", (req, res) => {
+  console.log("start");
+  const email = req.params.email;
+  const images = [];
+  Appointment.find({ email: email })
+    .then((appointments) => {
+      appointments.forEach((appointment) => {
+        appointment.images.forEach((image) => {
+          images.push(image);
+        });
+      });
+      res.json(images);
+    })
+    .catch(() => res.status(404).json({ error: "No images found" }));
+});
+
 router.get("/Appointment/:email", (req, res) => {
   const email = req.params.email;
 
