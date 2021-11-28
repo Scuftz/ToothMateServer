@@ -1,7 +1,8 @@
 const mongoose = require("mongoose"),
-  Pdf = require('./PdfModel.js'), PdfSchema = mongoose.model('Pdf').schema, 
-  Img = require('./ImgModel.js'), ImgSchema = mongoose.model('Img').schema;
-
+  Pdf = require("./PdfModel.js"),
+  PdfSchema = mongoose.model("Pdf").schema,
+  Img = require("./ImgModel.js"),
+  ImgSchema = mongoose.model("Img").schema;
 
 const appointmentSchema = mongoose.Schema({
   email: {
@@ -20,10 +21,10 @@ const appointmentSchema = mongoose.Schema({
   //   type: Buffer,
   //   contentType: String
   // },
-  imgs: [ImgSchema],
+  images: [ImgSchema],
   notes: {
-    type: String
-  }
+    type: String,
+  },
 });
 
 mongoose.model("Appointment", appointmentSchema);

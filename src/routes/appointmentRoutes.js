@@ -1,4 +1,5 @@
 const express = require("express");
+
 const mongoose = require("mongoose");
 const multer = require("multer");
 const fs = require("fs");
@@ -10,17 +11,18 @@ const Pdf = mongoose.model("Pdf");
 const router = express.Router();
 
 const storage = multer.diskStorage({
-  destination: function(req, res, cb) {
-    cb(null, 'uploads/')
-  }
-})
+  destination: function (req, res, cb) {
+    cb(null, "uploads/");
+  },
+});
 
 const upload = multer({ storage: storage });
 
 router.get("/image/:id", (req, res) => {
   const id = req.params.id;
-  const imgv = Img.findOne({ _id: id })
-  .then((imgv) => res.send(Buffer.from(imgv.img.data.buffer).toString("base64")));
+  const imgv = Img.findOne({ _id: id }).then((imgv) =>
+    res.send(Buffer.from(imgv.img.data.buffer).toString("base64"))
+  );
 });
 
 router.get("/Appointment", (req, res) => {
@@ -29,24 +31,36 @@ router.get("/Appointment", (req, res) => {
     .catch((err) => res.status(404).json({ error: "No appointments found" }));
 });
 
-router.post("/addAppointment", upload.single('file'), async (req, res) => {
-  const { email, date, dentalData, invoice, img, notes } = req.body;
+router.post("/addAppointment", upload.single("file"), async (req, res) => {
+  const { email, date, dentalData, notes } = req.body;
 
   var pdfs = new Pdf();
   pdfs.pdf.data = fs.readFileSync(req.body.invoice.path);
   pdfs.pdf.contentType = "application/pdf";
 
-  var imgs = new Img();
-  imgs.img.contentType = "image/png";
+  var images = [];
 
+  let imageArray = req.body.images;
   try {
-    imgs.img.data = fs.readFileSync(req.body.img.path);
+    imageArray.forEach((image) => {
+      var img = new Img();
+      img.img.data = fs.readFileSync(image.path);
+      img.img.contentType = "image/png";
+      images.push(img);
+    });
   } catch (err) {
-    imgs.img.data = "";
+    console.log("Image error: " + err);
   }
 
   try {
-    const appointment = new Appointment({ email, date, dentalData, pdfs, imgs, notes });
+    const appointment = new Appointment({
+      email,
+      date,
+      dentalData,
+      pdfs,
+      images,
+      notes,
+    });
     await appointment.save();
     res.send("Appointment Made");
   } catch (err) {
