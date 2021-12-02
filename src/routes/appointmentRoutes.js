@@ -3,10 +3,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const fs = require("fs");
+const { POINT_CONVERSION_HYBRID } = require("constants");
 
 const Appointment = mongoose.model("Appointment");
 const Img = mongoose.model("Img");
 const Pdf = mongoose.model("Pdf");
+const User = mongoose.model("User");
 
 const router = express.Router();
 
@@ -32,13 +34,19 @@ router.get("/Appointment", (req, res) => {
 });
 
 router.post("/addAppointment", upload.single("file"), async (req, res) => {
-  const { nhi, date, dentalData, notes } = req.body;
+  const { date, dentalData, notes } = req.body;
+  const caseInsensitiveNhi = req.body.nhi;
+  const nhi = caseInsensitiveNhi.toUpperCase();
 
   var pdfs = new Pdf();
   pdfs.pdf.data = fs.readFileSync(req.body.invoice.path);
   pdfs.pdf.contentType = "application/pdf";
 
   var images = [];
+  const user = await User.findOne({ nhi: nhi });
+  if (user === null) {
+    return res.status(404).send("NHI does not exist in ToothMate System");
+  }
 
   let imageArray = req.body.images;
   try {
@@ -64,7 +72,7 @@ router.post("/addAppointment", upload.single("file"), async (req, res) => {
     await appointment.save();
     res.send("Appointment Made");
   } catch (err) {
-    return res.status(422).send({ error: "Could not save appointment" });
+    return res.status(422).send({ err });
   }
 });
 
