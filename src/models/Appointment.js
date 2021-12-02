@@ -5,7 +5,7 @@ const mongoose = require("mongoose"),
   ImgSchema = mongoose.model("Img").schema;
 
 const appointmentSchema = mongoose.Schema({
-  email: {
+  nhi: {
     type: String,
     required: true,
   },
@@ -17,10 +17,6 @@ const appointmentSchema = mongoose.Schema({
     type: Array,
   },
   pdfs: [PdfSchema],
-  // pdf: {
-  //   type: Buffer,
-  //   contentType: String
-  // },
   images: [ImgSchema],
   notes: {
     type: String,

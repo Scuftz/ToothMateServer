@@ -32,7 +32,7 @@ router.get("/Appointment", (req, res) => {
 });
 
 router.post("/addAppointment", upload.single("file"), async (req, res) => {
-  const { email, date, dentalData, notes } = req.body;
+  const { nhi, date, dentalData, notes } = req.body;
 
   var pdfs = new Pdf();
   pdfs.pdf.data = fs.readFileSync(req.body.invoice.path);
@@ -52,9 +52,11 @@ router.post("/addAppointment", upload.single("file"), async (req, res) => {
     console.log("Image error: " + err);
   }
 
+  const user = await User;
+
   try {
     const appointment = new Appointment({
-      email,
+      nhi,
       date,
       dentalData,
       pdfs,
