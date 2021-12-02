@@ -52,8 +52,6 @@ router.post("/addAppointment", upload.single("file"), async (req, res) => {
     console.log("Image error: " + err);
   }
 
-  const user = await User;
-
   try {
     const appointment = new Appointment({
       nhi,
@@ -70,11 +68,10 @@ router.post("/addAppointment", upload.single("file"), async (req, res) => {
   }
 });
 
-router.get("/getAllImages/:email", (req, res) => {
-  console.log("start");
-  const email = req.params.email;
+router.get("/getAllImages/:nhi", (req, res) => {
+  const nhi = req.params.nhi;
   const images = [];
-  Appointment.find({ email: email })
+  Appointment.find({ nhi: nhi })
     .then((appointments) => {
       appointments.forEach((appointment) => {
         appointment.images.forEach((image) => {
@@ -86,10 +83,10 @@ router.get("/getAllImages/:email", (req, res) => {
     .catch(() => res.status(404).json({ error: "No images found" }));
 });
 
-router.get("/Appointment/:email", (req, res) => {
-  const email = req.params.email;
+router.get("/Appointment/:nhi", (req, res) => {
+  const nhi = req.params.nhi;
 
-  Appointment.find({ email: email })
+  Appointment.find({ nhi: nhi })
     .then((appointment) => res.json(appointment))
     .catch((err) => res.status(404).json({ error: "No appointments found" }));
 });
