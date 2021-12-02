@@ -124,12 +124,12 @@ router.get("/isChild/:id", (req, res) => {
     .catch((err) => res.status(404).json({ error: "Error" }));
 });
 
-router.get("/getEmail/:id", (req, res) => {
+router.get("/getNhi/:id", (req, res) => {
   const id = req.params.id;
 
-  const user = User.findOne({ _id: id })
-    .then((user) => res.json({ email: user.email }))
-    .catch((err) => res.status(404).json({ error: "No email found" }));
+  User.findOne({ _id: id })
+    .then((user) => res.json({ nhi: user.nhi }))
+    .catch((err) => res.status(404).json({ error: "No nhi found" }));
 });
 
 router.get("/getUserClinic/:id", (req, res) => {
