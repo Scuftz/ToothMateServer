@@ -9,13 +9,14 @@ const router = express.Router();
 
 //Whenever someone makes a POST request to /signup, the following callback function will be called
 router.post("/signup", async (req, res) => {
-  const { firstname, lastname, email, password, dob, clinic } = req.body; //req.body contains the user sign up details
+  const { firstname, lastname, email, nhi, password, dob, clinic } = req.body; //req.body contains the user sign up details
 
   try {
     const user = new User({
       firstname,
       lastname,
       email,
+      nhi,
       password,
       dob,
       clinic,
@@ -39,7 +40,7 @@ router.post("/disconnectchild", async (req, res) => {
 });
 
 router.post("/signupchild", async (req, res) => {
-  const { firstname, lastname, email, password, dob, clinic, parent } =
+  const { firstname, lastname, email, nhi, password, dob, clinic, parent } =
     req.body;
 
   try {
@@ -47,6 +48,7 @@ router.post("/signupchild", async (req, res) => {
       firstname,
       lastname,
       email,
+      nhi,
       password,
       parent,
       dob,
@@ -122,12 +124,12 @@ router.get("/isChild/:id", (req, res) => {
     .catch((err) => res.status(404).json({ error: "Error" }));
 });
 
-router.get("/getEmail/:id", (req, res) => {
+router.get("/getNhi/:id", (req, res) => {
   const id = req.params.id;
 
-  const user = User.findOne({ _id: id })
-    .then((user) => res.json({ email: user.email }))
-    .catch((err) => res.status(404).json({ error: "No email found" }));
+  User.findOne({ _id: id })
+    .then((user) => res.json({ nhi: user.nhi }))
+    .catch((err) => res.status(404).json({ error: "No nhi found" }));
 });
 
 router.get("/getUserClinic/:id", (req, res) => {
