@@ -35,6 +35,26 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tooth: [
+    {
+      id: {
+        type: String,
+      },
+      treatmentarray: [
+        {
+          type: {
+            type: String,
+          },
+          section: {
+            type: String,
+          },
+          date: {
+            type: Date,
+          },
+        },
+      ],
+    },
+  ],
 });
 
 //Pre-save hook that automatically runs before we save a user
