@@ -11,7 +11,7 @@ router.get("/:id/tooth/:toothId", async (req, res) => {
   const { id, toothId } = req.params;
   User.findById(id)
     .then((user) => {
-      const tooth = user.tooths.id(toothId);
+      const tooth = user.tooth.id(toothId);
       res.send(tooth);
     })
     .catch((err) => {
