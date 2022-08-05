@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
       id: {
         type: String,
       },
+      isExtracted: {
+        type: Boolean,
+        default: false,
+      },
       treatmentarray: [
         {
           type: {
