@@ -9,7 +9,7 @@ const router = express.Router();
 
 //Whenever someone makes a POST request to /signup, the following callback function will be called
 router.post("/signup", async (req, res) => {
-  const { firstname, lastname, email, nhi, password, dob, clinic } = req.body; //req.body contains the user sign up details
+  const { firstname, lastname, email, nhi, password, dob, clinic, tooth,} = req.body; //req.body contains the user sign up details
 
   try {
     const user = new User({
@@ -20,6 +20,7 @@ router.post("/signup", async (req, res) => {
       password,
       dob,
       clinic,
+      tooth,
     }); //creating instance of user
     await user.save(); //saves the user - async operation to save user to DB
 
