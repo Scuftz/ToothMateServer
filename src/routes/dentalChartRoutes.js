@@ -18,3 +18,14 @@ router.get("/:id/tooth/:toothId", async (req, res) => {
       res.status(404).send(err);
     });
 });
+
+router.get("/getDentalChart/:id", async (req, res) => {
+  const { id } = req.params;
+  User.findById(id)
+    .then((user) => {
+      const toothArray = user.tooth;
+      res.send(toothArray);
+    }) .catch((err) => {
+      res.status(404).send(err);
+    });
+});

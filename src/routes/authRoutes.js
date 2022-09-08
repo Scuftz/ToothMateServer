@@ -41,7 +41,7 @@ router.post("/disconnectchild", async (req, res) => {
 });
 
 router.post("/signupchild", async (req, res) => {
-  const { firstname, lastname, email, nhi, password, dob, clinic, parent } =
+  const { firstname, lastname, email, nhi, password, dob, clinic, parent, tooth } =
     req.body;
 
   try {
@@ -54,6 +54,7 @@ router.post("/signupchild", async (req, res) => {
       parent,
       dob,
       clinic,
+      tooth,
     });
     await user.save();
     parentInfo = await User.findByIdAndUpdate(parent, {
