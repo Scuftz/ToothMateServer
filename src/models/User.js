@@ -40,6 +40,9 @@ const userSchema = new mongoose.Schema({
       id: {
         type: String,
       },
+      tooth_code: {
+        type: String
+      },
       isExtracted: {
         type: Boolean,
         default: false,
