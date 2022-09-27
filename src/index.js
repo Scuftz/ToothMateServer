@@ -10,6 +10,7 @@ const authRoutes = require("./routes/authRoutes");
 const educationRoutes = require("./routes/educationRoutes");
 const clinicRoutes = require("./routes/clinicRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
+const dentalChartRoutes = require("./routes/dentalChartRoutes");
 
 const requireAuth = require("./middlewares/requireAuth");
 
@@ -19,6 +20,7 @@ app.use(authRoutes);
 app.use(educationRoutes);
 app.use(clinicRoutes);
 app.use(appointmentRoutes);
+app.use(dentalChartRoutes);
 
 
 //MongoDB connection

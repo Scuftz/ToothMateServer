@@ -1,4 +1,4 @@
-//File to handle authentication
+//File to get dental chart
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
@@ -7,15 +7,14 @@ const bcrypt = require("bcrypt");
 
 const router = express.Router();
 
-router.get("/:id/tooth/:toothId", async (req, res) => {
-  const { id, toothId } = req.params;
+router.get("/:id/teeth", async (req, res) => {
+  const { id } = req.params;
   User.findById(id)
     .then((user) => {
-      const tooth = user.tooth.id(toothId);
-      res.send(tooth);
+      res.send(user.tooth);
     })
     .catch((err) => {
-      res.status(404).send(err);
+      res.status(404).send({ error: err.message });
     });
 });
 
@@ -25,7 +24,10 @@ router.get("/getDentalChart/:id", async (req, res) => {
     .then((user) => {
       const toothArray = user.tooth;
       res.send(toothArray);
-    }) .catch((err) => {
+    })
+    .catch((err) => {
       res.status(404).send(err);
     });
 });
+
+module.exports = router;
