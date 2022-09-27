@@ -52,6 +52,9 @@ const userSchema = new mongoose.Schema({
           type: {
             type: String,
           },
+          material: {
+            type: String,
+          },
           section: [{ type: Number }],
           date: {
             type: Date,
