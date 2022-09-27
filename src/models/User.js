@@ -40,8 +40,8 @@ const userSchema = new mongoose.Schema({
       id: {
         type: String,
       },
-      tooth_code: {
-        type: String
+      toothCode: {
+        type: String,
       },
       isExtracted: {
         type: Boolean,
